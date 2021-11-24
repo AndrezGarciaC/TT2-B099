@@ -106,7 +106,7 @@ export default function Registro() {
                                 Regresar
                             </button>
                             <hr />
-                            <p className="text-center small m-2"> Copyright WHITE LABEL 2021</p>
+                            <p className="text-center small m-2"> </p>
                         </div>
                     </div>
                 </div>

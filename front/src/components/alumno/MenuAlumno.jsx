@@ -245,13 +245,7 @@ export default function MenuAlumno({ tipo, nombre, Foto }) {
                         <List >
                             <ListItem>
                                 <ListItemText className="text-center text-secondary" >
-                                    <a href="https://www.facebook.com/">
-                                        <FacebookIcon className={classes.facebook} />
-                                    </a>
-                                    <a href="https://www.youtube.com/">
-                                        <YouTubeIcon className={classes.youtube} />
-                                    </a>
-                                    <p className="custom-control-description small my-1"> Copyright WHITE LABEL 2021</p>
+                                    
                                 </ListItemText>
                             </ListItem>
                         </List>

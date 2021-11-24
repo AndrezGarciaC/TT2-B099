@@ -102,7 +102,7 @@ export default function Login({ setNombre, setFoto, setTipo, setToken, setId }) 
                             </Link>
                         </u>
                         <hr />
-                        <p className="text-center small mt-2 mb-0"> Copyright WHITE LABEL 2021</p>
+                        <p className="text-center small mt-2 mb-0"> </p>
                     </div>
                 </div>
             </div>

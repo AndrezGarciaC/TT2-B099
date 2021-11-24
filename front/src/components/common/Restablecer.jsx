@@ -88,7 +88,7 @@ export default function Restablecer() {
                             </form>
                             <hr />
                             <div className="custom-control text-center">
-                                <span className="custom-control-description small "> Copyright WHITE LABEL 2021</span>
+                                <span className="custom-control-description small "> </span>
                             </div>
                         </div>
                     </div>
