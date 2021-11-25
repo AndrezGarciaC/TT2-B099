@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "6169b5032f72eed7261d460e"
+  },
+  "nombre": "admin",
+  "usuario": "admin",
+  "foto": "",
+  "correo": "1830394@upt.edu.mx",
+  "contraseña": "$2b$10$UuedchJebvCuyrYEINi73.fb2I43ZzqZHG8kzMSSgWCIo11tvQqe6",
+  "tipo": "admin",
+  "activo": true,
+  "__v": 0
+}]
