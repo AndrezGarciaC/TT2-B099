@@ -239,7 +239,7 @@ export default function MenuAdmin({ tipo, nombre, Foto }) {
                                     <a href="https://www.youtube.com/">
                                         <YouTubeIcon className={classes.youtube} />
                                     </a>
-                                    <p className="custom-control-description small my-1"> Copyright WHITE LABEL 2021</p>
+                                    <p className="custom-control-description small my-1"> </p>
                                 </ListItemText>
                             </ListItem>
                         </List>

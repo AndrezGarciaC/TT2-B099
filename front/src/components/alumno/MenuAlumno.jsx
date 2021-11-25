@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react' //importamos react
 import { NavLink } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
-import { Link as RouterLink } from 'react-router-dom';
+import { useHistory } from "react-router-dom";//importamos react-router-dom para enrutar
+import { Link as RouterLink } from 'react-router-dom';//importamos react-router-dom para enrutar
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
