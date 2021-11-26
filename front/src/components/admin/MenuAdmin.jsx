@@ -1,3 +1,4 @@
+//Se importan elementos de mejora visual////
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
@@ -24,7 +25,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import usedef from '../../img/usedef.png';
 
-
+// se construye la estructura del menu para administrador////
 const drawerWidth = 215;
 
 const useStyles = makeStyles((theme) => ({
@@ -152,7 +153,7 @@ export default function MenuAdmin({ tipo, nombre, Foto }) {
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
     };
-
+    // Estilo de botones, logo  y entorno////
     return (
         <>
             <div className={classes.root}>
@@ -230,19 +231,7 @@ export default function MenuAdmin({ tipo, nombre, Foto }) {
                     </List>
                     <Divider />
                     <div className="myfooter">
-                        <List >
-                            <ListItem>
-                                <ListItemText className="text-center text-secondary" >
-                                    <a href="https://www.facebook.com/">
-                                        <FacebookIcon className={classes.facebook} />
-                                    </a>
-                                    <a href="https://www.youtube.com/">
-                                        <YouTubeIcon className={classes.youtube} />
-                                    </a>
-                                    <p className="custom-control-description small my-1"> Copyright WHITE LABEL 2021</p>
-                                </ListItemText>
-                            </ListItem>
-                        </List>
+                        
                     </div>
                 </Drawer>
                 <main

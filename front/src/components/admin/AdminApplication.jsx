@@ -1,4 +1,5 @@
-import React from 'react'; //comentando libreria nueva para prueba
+//Importando funciones de modulos externos //
+import React from 'react'; 
 import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -9,6 +10,7 @@ import EditarUsuario from './EditarUsuario';
 import MenuAdmin from './MenuAdmin';
 import EditarPerfil from '../common/EditarPerfil'
 
+//se enlaza hoja de estilo con componente de funcion//
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -16,11 +18,13 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
 }));
 
+//Exportando funcion para exponer activos//
 export default function AdminApplication({ tipo, nombre, token, setFoto, Foto }) {
     const classes = useStyles();
+    //Comienza estructura de pantalla administrador//
     return (
         <>
-            <div className={classes.toolbar}></div>
+            <div className={classes.toolbar}></div>                       
             <div className={classes.container}>
                 <MenuAdmin tipo={tipo} nombre={nombre} Foto={Foto}/>
                 <Switch>

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from "react-router-dom";
-import axios from '../../config/axios'
-import Swal from 'sweetalert2';
+//Importando funciones de modulos externos //
+import React, { useState, useEffect } from 'react'; //Creamos una variable interna para almacenar estado del componente//
+import { useHistory, useParams } from "react-router-dom"; //hook que permite devolver informacion como ubicacion del usuario//
+import axios from '../../config/axios'// Libreria que permite hacer operaciones como cliente HTTP
+import Swal from 'sweetalert2';//Libreria para agregar estilos a nuestras botoneras//
 
+//Se exporta funcion EditarUsuario para su uso externo//
 export default function EditarUsuario({ token }) {
     const history = useHistory();
     const { id } = useParams();
@@ -12,6 +14,8 @@ export default function EditarUsuario({ token }) {
     });
 
     const { nombre, tipo } = datos;
+
+    //Funcion para obtener usuarios//
 
     useEffect(() => {
         try {
@@ -33,6 +37,7 @@ export default function EditarUsuario({ token }) {
         }
     }, [token, id]);
 
+    //Funcion que permite editar datos del usuario//
     const presetDatos = e => {
         setDatos({ ...datos, [e.target.name]: e.target.value });
     };
@@ -70,6 +75,7 @@ export default function EditarUsuario({ token }) {
     const regresar = () => {
         history.push(`/usuarios`);
     };
+    //Estructura de "Editar usuario"
     return (
         <div className="container p-5">
             <h1 className="text-primary text-center">Editar Usuario</h1>

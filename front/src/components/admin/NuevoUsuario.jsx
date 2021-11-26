@@ -1,8 +1,10 @@
+//Importando funciones de modulos externos //
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from '../../config/axios'
 import Swal from 'sweetalert2';
 
+//Exportando funcion para exponer activos//
 export default function NuevoUsuario({ token }) {
     const history = useHistory();
     const [datos, setDatos] = useState({
@@ -14,6 +16,7 @@ export default function NuevoUsuario({ token }) {
         activo: true
     });
 
+    //Se realiza funcion para la captura de datos del usuario//
     const { nombre, usuario, correo, contraseña, tipo } = datos;
     const presetDatos = e => {
         setDatos({ ...datos, [e.target.name]: e.target.value });
@@ -30,8 +33,8 @@ export default function NuevoUsuario({ token }) {
                     headers: { 'x-access-token': token }
                 });
             if (respuesta.data.estado) {
-                Swal.fire(
-                    'Éxito',
+                Swal.fire(                                   //Se da estilo a la respuesta predeterminada para creacion de usuario
+                    'Éxito',                                 
                     'El usuario se creo correctamente',
                     'success'
                 );
@@ -57,6 +60,7 @@ export default function NuevoUsuario({ token }) {
     const regresar = () => {
         history.push(`/usuarios`);
     };
+    //Se da estilo a la vista de creacion de nuevo usuario //
     return (
         <div className="container p-5">
             <h1 className="text-primary text-center">Crear Usuario</h1>
