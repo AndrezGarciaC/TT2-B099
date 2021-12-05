@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import MaterialTable from "@material-table/core";
 import { faEye, faEdit, faTrash, faTrashRestore } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../config/axios'
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';   
 
 export default function Reactivos({ token, idP }) {
 
@@ -16,7 +16,7 @@ export default function Reactivos({ token, idP }) {
             async function obtenerReactivos() {
                 const respuesta = await axios.get(`api/reactivos/profesor/${idP}`,
                     {
-                        headers: { 'x-access-token': token }
+                        headers: { 'x-access-token': token }  
                     });
                 setReactivos(respuesta.data)
             }

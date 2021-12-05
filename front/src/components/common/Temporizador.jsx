@@ -37,8 +37,8 @@ const Timer = (props) => {
                 if (horas === 0) {
                     clearInterval(myInterval)
                 } else {
-                    setHoras(horas - 1)
-                    setMinutos(59)
+                    setHoras(horas - 1)  
+                    setMinutos(59)    
                 }
             }
             if (horas === 0 && minutos === 0 && segundos === 0 || 
