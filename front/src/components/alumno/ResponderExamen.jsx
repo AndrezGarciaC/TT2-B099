@@ -8,21 +8,22 @@ import MathJax from 'react-mathjax'
 var Latex = require('react-latex');
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-
+//creamos la función responder examen la cual recibira como parametros el token  de Jsonwebtoken y el IdA del examen
 export default function ResponderExamen({ token, idA }) {
-
+    //usamos let para declarar variables a nivel bloques
     let ids = [];
     let reactivos2 = [];
     let aleatorio = false;
-
+     //se usara useParams para redirigir al id
     const { id } = useParams();
     let identificadores = id.split(';')
     let idEx = identificadores[0];
     let idRegistro = identificadores[1];
 
-
+    //declaramos variables que vamos a utilizar
     let respuestas = [];
     const [reactivosCalibrados, setReactivosCalibrados] = useState([]);
+    //esta variable sera la encargada de medir el tiempo
     const [tiempo, setTiempo] = useState(false)
     const [reactivos, setReactivos] = useState([]);
     const [registros, setRegistros] = useState([]);
@@ -34,11 +35,11 @@ export default function ResponderExamen({ token, idA }) {
     const { nombre, materia, tema, duracion, preguntasAleatorias, _id, fechaTerminacion } = generales
     const { estatus, calificación, duración, fechaInicio, fechaFin } = registro
     const [loading, setLoading] = useState(false);
-
+      //Usamos useEffect para poder tener un ciclo de nuestro componente 
     useEffect(() => {
-
+      //Usamos useEffect para poder tener un ciclo de nuestro componente 
         try {
-
+            //para obtener los datos del examen
             async function obtenerDatosRegistro() {
                 const respuesta = await axios.get(`api/respuestas/${idRegistro}`,
                     {
@@ -47,7 +48,7 @@ export default function ResponderExamen({ token, idA }) {
                 SetRegistro(respuesta.data.registros[0])
                 setLoading(true);
             }
-
+            //Usaremos otra función asyncrona para obtener el tiempo permitido por el profesor
             async function obtenerDatos() {
                 const respuesta = await axios.get(`api/examenes/alumno/${idEx}`,
                     {
@@ -71,6 +72,7 @@ export default function ResponderExamen({ token, idA }) {
                 setHora(date)
                 obtenerReactivos()
             }
+            //en esta sección recoletamos todos los datos de los reactivos que se daran
             async function obtenerReactivos() {
                 const respuesta = await axios.get(`api/reactivos/alumno`,
                     {
@@ -86,7 +88,7 @@ export default function ResponderExamen({ token, idA }) {
                         setDatos(dato)
                     }
                 }
-            }
+            }//Accesamos al examen hecho por el profesor para  que el alumno lo conteste
             async function obtenerReactivosT() {
                 const respuesta = await axios.get(`api/reactivos/AlumnoProfesor/${registro.idProfesor}`,
                     {
@@ -115,6 +117,7 @@ export default function ResponderExamen({ token, idA }) {
             }
             obtenerDatos();
             obtenerDatosRegistro();
+            // si no podemos accesar marcamos error
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -137,7 +140,7 @@ export default function ResponderExamen({ token, idA }) {
         })
 
     }
-
+    //pasamos a la sección de calificar  examen 
     async function calificar() {
         setLoading(false);
         let calificacion = 0;
@@ -145,6 +148,7 @@ export default function ResponderExamen({ token, idA }) {
             respuestas.map(resp => {
                 if (resp.respuesta.pregunta === dat._id) {
                     if (resp.respuesta.respuest === dat.opcionCorrecta._id) {
+                        // se usa  parseFloat para pasar la cadena a un flotante y obtengamos la calificación
                         calificacion = parseFloat(calificacion) + parseFloat(dat.ponderacion);
                     } else {
                         calificacion = parseFloat(calificacion) + 0;
@@ -152,6 +156,7 @@ export default function ResponderExamen({ token, idA }) {
                 }
             })
         })
+        //damos la calificación final asi como datos de inicio y termino
         let data = {
             calificacion: Math.round(calificacion * 100) / 100,
             estatus: 'terminado',
@@ -161,9 +166,10 @@ export default function ResponderExamen({ token, idA }) {
         }
         return data
     }
-
+    //en esta parte  realizaremos la calibración  de forma asyncrona
     const calibrado = async () => {
         let resp = [];
+        // por medio de una petición al servidor 
         const respuesta = await axios.get(`api/respuestas/AlumnoProfesor/recuperar/${registro.idProfesor}`,
         {
             headers: { 'x-access-token': token }

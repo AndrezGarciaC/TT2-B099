@@ -10,10 +10,13 @@ import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 registerLocale('es', es)
 import es from 'date-fns/locale/es';
-
+//Usaremos la función nuevo examen para dar de alta un examen 
 export default function NuevoExamen({ token, idA }) {
+    //se usara useParams para redirigir al examen
     const { idE } = useParams();
+    //se recolecta el historial
     const history = useHistory();
+    //declaramos el codigo para mas adelante evaluar si es valido o no
     const [codigos, setCodigo] = useState({
         codigo: ''
     });
@@ -26,25 +29,33 @@ const { codigo } = codigos;
 
     const enviar = async e => {
         e.preventDefault();
+        //Realizamos una petición al servidor para verificar si el codigo es correcto
         console.log('se envio')
+        // aplicamos un try/ catch
         try {
+            //obtenemos respuesta del servidor
             const respuesta = await axios.post(`/api/respuestas`, codigos,
                 {
+                    //verificamos que tengamos acceso  por medio del token esto desde JsonwebToken
                     headers: { 'x-access-token': token }
                 });
+                //realizamos un if para ingrsar a la parte del examen
             if (respuesta.data.estado) {
                 const respuestaids = await axios.patch(`/api/usuarios/editarEx/${idA}`, respuesta.data.idsRegistro,
                     {
                         headers: { 'x-access-token': token }
                     })
+                    //si es correcto el estado es decir si se comprueba el mismo codigo entonces 
                 if (respuestaids.data.estado) {
                     Swal.fire(
                         'Éxito',
                         'El examen ha sido cargado a tu perfil',
                         'success'
                     );
+                    //se agrega el examen
                     history.push(`/examenes`);
                 }
+                //caso contrario colocamos un mensaje de error 
             }else{
                 
                 Swal.fire({
@@ -54,6 +65,7 @@ const { codigo } = codigos;
                     footer: respuesta.data.mensaje
                 });
             }
+            //en el caso del catch sucede lo mismo enviamos un mensaje de error al cargar el examen
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -63,6 +75,7 @@ const { codigo } = codigos;
             });
         }
     };
+    //si regresamos a la vista, regresaremos al componente de examenes
     const regresar = () => {
         history.push(`/examenes`);
     };
