@@ -287,22 +287,26 @@ export default function ResponderExamen({ token, idA }) {
             }
         }
     }
-    
+
     const enviar = async e => {
 
        if(e){
          e.preventDefault(); 
        }
-        
+        //Esperamos la calificación
         const data = await calificar();
+        //aplicamos un try/catch para hacer solicitud al servidor
         try {
             const respuesta = await axios.put(`/api/respuestas/editar/${idRegistro}`, data,
                 {
                     headers: { 'x-access-token': token }
                 });
+            // si la respuesta es calibrado  damos el estado 
             if (respuesta.data.estado) {
                await calibrado();
-            } else {
+            } 
+            //En caso de erroneo el estado lanzamos el mensaje de error
+            else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -310,7 +314,7 @@ export default function ResponderExamen({ token, idA }) {
                     footer: respuesta.data.mensaje
                 });
             }
-
+            //Caso contrario damos el mensaje de error al registrar el examen 
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -320,10 +324,14 @@ export default function ResponderExamen({ token, idA }) {
             });
         }
     };
+    //Esta sección es para lanzar el error en el tiempo del examen en caso de haberse cumplido el tiempo
     const iniciar = async e => {
+        //Declaramos las variable que usaremos para el periodo
         let terminacionPeriodo = new Date(fechaTerminacion);
         let inicioPeriodo = new Date(generales.fechaInicio);
         let horaActual = new Date(Date.now());
+
+        //Si el periodo de tiempo aun no a iniciado lanzaremos un mensaje
         if (horaActual < inicioPeriodo) {
             Swal.fire({
                 icon: 'error',
@@ -331,6 +339,7 @@ export default function ResponderExamen({ token, idA }) {
                 text: `El periodo del examen inicia el ${format(inicioPeriodo, "MM/dd/yyyy h:mm a")}`,
                 footer: 'Periodo de examen no iniciado'
             });
+            //Si el periodo de tiempo ya paso damos el mensaje de que el examen a concluido
         } else if (horaActual > terminacionPeriodo) {
             var date = format(new Date(), "MM/dd/yyyy h:mm:s a");
             var date2 = format(Date.now() + duracion * 60000, "MM/dd/yyyy h:mm:s a");
@@ -345,6 +354,7 @@ export default function ResponderExamen({ token, idA }) {
                 text: `El periodo del examen concluyo el  ${format(terminacionPeriodo, "MM/dd/yyyy h:mm a")}`,
                 footer: 'Periodo de examen concluido'
             });
+            //Caso contrario iniciara el examen 
         } else {
             var date = format(new Date(), "MM/dd/yyyy h:mm:s a");
             var date2 = format(Date.now() + duracion * 60000, "MM/dd/yyyy h:mm:s a");
@@ -357,7 +367,7 @@ export default function ResponderExamen({ token, idA }) {
                     {
                         headers: { 'x-access-token': token }
                     });
-
+                    //Colocamos un catch para dar un mensaje de error 
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
