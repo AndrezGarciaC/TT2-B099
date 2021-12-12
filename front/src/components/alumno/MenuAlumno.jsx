@@ -27,14 +27,16 @@ import Description from '@material-ui/icons/Description';
 
 
 
-const drawerWidth = 215;
-
+const drawerWidth = 215; // ancho del cajón
+// se usa Material Ui
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         backgroundColor: theme.palette.background.paper,
     },
+    // muestra la barra de prototipo 
     appBar: {
+        // personalizamos la transición, 
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -48,13 +50,14 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
+    //Personalizamos los botones de nuestro appBarr
     menuButton: {
         marginRight: theme.spacing(2),
         color: 'white',
-    },
+    },//ocultamos elemento
     hide: {
         display: 'none',
-    },
+    },// Este cajon de navegación, barra lateral que permitira el acceso a otras funcionalidades
     drawer: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
@@ -65,20 +68,25 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
         backgroundColor: '#132B40',
     },
+    // Configuración del Header(encabezado)
     drawerHeader: {
+        //Display flex nos ayuda a colocar esta sección como celdas para hacerla mas adaptable
         display: 'flex',
         alignItems: 'center',
+        //nos permite hacer una adaptación automatica en el toolbar
         ...theme.mixins.toolbar,
+        //alineamos los elementos en la parte de abajo
         justifyContent: 'flex-end',
     },
     toolbar: theme.mixins.toolbar,
+     //personalizamos la transición de la etiqueta 
     content: {
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
         marginLeft: -drawerWidth,
-    },
+    }, //personalizamos la transición de la etiqueta 
     contentShift: {
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,
@@ -86,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
         }),
         marginLeft: 0,
     },
+    //Reacomodamos los elementos una ves termine la transición de nuestra barra
     expand: {
         transform: 'rotate(0deg)',
         marginLeft: '1px',
@@ -138,19 +147,19 @@ const ListItem = withStyles({
     },
     selected: {}
 })(MuiListItem);
-
+ //se declara la función alumno la cual tendra tipo, nombre y foto, con use History recabamos la información, y con useStyles y useThemes personalizamos
 export default function MenuAlumno({ tipo, nombre, Foto }) {
     const history = useHistory();
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(true);
     const [selectedIndex, setSelectedIndex] = useState(0);
-
+    // para cerrar sesión
     const cerrarSesion = () => {
         localStorage.removeItem('sesion');
         history.push(`/`);
     }
-
+    //Acción que se debera hacer cuando demos un click abajo
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
     };
