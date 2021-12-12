@@ -169,17 +169,21 @@ export default function ResponderExamen({ token, idA }) {
     //en esta parte  realizaremos la calibración  de forma asyncrona
     const calibrado = async () => {
         let resp = [];
-        // por medio de una petición al servidor 
+        // por medio de una petición al servidor recuperamos los datos
         const respuesta = await axios.get(`api/respuestas/AlumnoProfesor/recuperar/${registro.idProfesor}`,
-        {
+        {   //seguimos verificando la parte de acceso bajo el token de jsonwebtoken
             headers: { 'x-access-token': token }
         });
+        //En esta parte realizamos el registro de respuestas incorrectas y correctas
         if(respuesta){
             generales.reactivo.map(reactivo => {
                 respuesta.data.map(registro => {
+                    //verificamos el id que sea correcto
                     if (registro.idExamen === generales._id) {
+                        // comenzamos el registro de respuestas generales
                         if (registro.respuestas[0]) {
                             let approved = reactivos.filter(reactivo => reactivo._id === registro.respuestas[0].respuesta.pregunta);
+                            //si la respuesta es correcta entonces la tomamos como verdadera 
                             if (approved[0].opcionCorrecta._id === registro.respuestas[0].respuesta.respuest) {
                                 resp.push({
                                     reactivo: reactivo,
@@ -188,6 +192,7 @@ export default function ResponderExamen({ token, idA }) {
                                     Calificacion: registro.calificación,
                                     correcta: true
                                 })
+                                //Caso contrario si la respuesta es incorrecta la tomamos como false
                             } else {
                                 resp.push({
                                     reactivo: reactivo,
@@ -201,48 +206,68 @@ export default function ResponderExamen({ token, idA }) {
                     }
                 })
             })
-    
+            //declaramos una variable result donde tendremos la calif, examen, usuario y la respuesta que se tuve correcta de ese usuario
             let result = [];
             resp = resp.sort(((a, b) => b.Calificacion - a.Calificacion))
             result = resp.reduce((h, { Calificacion, Examen, Usuario, correcta, reactivo }) => {
                 return Object.assign(h, { [reactivo]: (h[reactivo] || []).concat({ Calificacion, Examen, Usuario, correcta, reactivo }) })
             }, [])
-    
+            //Declaramos los dos estados que podemos tener que son calibrado y no calibrado y reactivos calibrados
             let dat = Object.keys(result).map((key) => result[key]);
             let NoCalibrado = [];
             let calibrado = [];
             let filtrado = [];
             let filtrado2 = []
             let reactivosCalib = [];
+            //en esta parte realizamos la formula matematica de la calibración de reactivos
             dat.map(examen => {
+                //Aqui colocamos el minimo de usuarios necesarios para poder calibrar un reactivo
                 if (examen.length >= 4) {
+                    //Con la variable tCorrectoG verificamos cuales son las preguntas que se tienen correctas(filter)
                     let tCorrectoG = examen.filter(reactivo => reactivo.correcta === true);
                     let q1 = (Math.floor((1 * (examen.length + 1)) / 4));
                     let q3 = (Math.floor((3 * (examen.length + 1)) / 4));
                     let dataq1 = examen.slice(0, q1)
                     let dataq3 = examen.slice(q3, examen.length)
+                    //una vez hecho contabilizamos las respuestas tomamos el porcentaje del grupo superior y porcentajde el grupo interior
                     let tCorrectoPSG = dataq1.filter(reactivo => reactivo.correcta === true);
                     let tCorrectoPGI = dataq3.filter(reactivo => reactivo.correcta === true);
+                    //Calculamos el grado de dificultad de las preguntas correctas dividiendo las preguntas correctas entre el total y multiplicando por 100
                     let GD = (tCorrectoG.length / examen.length) * 100
+                    //Calculamos el porcentaje del grupo superior
                     let PSG = (tCorrectoPSG.length / dataq1.length) * 100
+                    //Calculamos el porcentaje del grupo inferior 
                     let PGI = (tCorrectoPGI.length / dataq3.length) * 100
+                    //seguimos con el procedimiento y restamos PSG-PGI
                     let PD = PSG - PGI
+                    //declaramos variables de norma discriminativa y 
                     let ND = 0;
                     let RD = 0;
+                    //si el grado de dificultad es de 25 al 76.92 se multiplica el grado de dificultad por .3
                     if (GD >= 0 && GD <= 76.92) {
                         ND = ((0.3 * GD) / 100);
-                    } else {
+
+                    } 
+                    //Caso contrario restamos 100 menos el grado de dificultad y dividimos entre 100
+                    else {
                         ND = ((100 - GD) / 100);
                     }
+                    //Si se da el caso de Poder discriminaciín y la norma disccriminativa es cero
                     if (PD === 0 && ND === 0) {
+                        // la relación discriminativa dara cero entonces
                         RD = 0
-                    } else {
+                    } 
+                    //Caso contrario dividiremos el poder de discriminación entre la norma discriminativa
+                    else {
                         RD = (PD / 100) / ND
                     }
+                    //En caso de que la relación discriminativa sea menor a 1 se colocara en no calibrado
                     if (RD < 1) {
                         filtrado = reactivos.filter(reactivo => reactivo._id === examen[0].reactivo);
                         NoCalibrado.push(filtrado)
-                    } else {
+                    }
+                    //En caso contrario se sumara a los calibrados
+                    else {
                         filtrado2 = reactivos.filter(reactivo => reactivo._id === examen[0].reactivo);
                         calibrado.push(filtrado2)
                     }
@@ -252,6 +277,7 @@ export default function ResponderExamen({ token, idA }) {
                 calibrado,
                 NoCalibrado
             }
+            //En esta sección actualizamos los datos y el estatus del reactivo en calibrado y no calibrado
             setLoading(true);
             if ((resp.length > 0) && (calibrado.length > 0 || NoCalibrado.length > 0) && loading === true) {
                 await axios.put(`api/reactivos/actualizar/datos`, reactivosCalib,
@@ -261,7 +287,7 @@ export default function ResponderExamen({ token, idA }) {
             }
         }
     }
-
+    
     const enviar = async e => {
 
        if(e){
